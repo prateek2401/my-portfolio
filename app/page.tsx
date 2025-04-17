@@ -1,78 +1,187 @@
 'use client';
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from 'next/image'
 import { Orbitron } from 'next/font/google'
+import { FaArrowRight } from 'react-icons/fa';
+import Typed from 'typed.js';
 
 const orbitron = Orbitron({ subsets: ['latin'] })
 
 export default function Home() {
   const [isQueryFormOpen, setIsQueryFormOpen] = useState(false);
+  const [showHiringFields, setShowHiringFields] = useState(false);
+  const [formName, setFormName] = useState('');
+  const el = useRef(null);
+
+  // Add form name handler
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormName(e.target.value);
+  };
+
+  // Add handleReasonChange function
+  const handleReasonChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setShowHiringFields(e.target.value === 'hiring');
+  };
+
+  // Typing effect
+  useEffect(() => {
+    if (el.current) {
+      const typed = new Typed(el.current, {
+        strings: [
+          'Full Stack Developer',
+          'Web Developer',
+          'API Specialist',
+          'Cloud Enthusiast'
+        ],
+        typeSpeed: 40,
+        backSpeed: 50,
+        loop: true
+      });
+
+      return () => {
+        typed.destroy();
+      };
+    }
+  }, []);
+
+  // Form visibility handler
+  useEffect(() => {
+    if (isQueryFormOpen) {
+      const reasonSelect = document.getElementById('reason');
+      const hiringDetails = document.querySelector('.hiring-details');
+
+      const handleChange = (e: Event) => {
+        if ((e.target as HTMLSelectElement).value === 'hiring') {
+          hiringDetails?.classList.remove('hidden');
+        } else {
+          hiringDetails?.classList.add('hidden');
+        }
+      };
+
+      reasonSelect?.addEventListener('change', handleChange);
+
+      return () => {
+        reasonSelect?.removeEventListener('change', handleChange);
+      };
+    }
+  }, [isQueryFormOpen]);
 
   return (
-    <main className="min-h-screen bg-[#fafafa]">
-      {/* Navigation */}
-      <header className="fixed w-full bg-white/80 backdrop-blur-md py-4 px-8 shadow-sm z-50">
-        <nav className="max-w-7xl mx-auto flex justify-between items-center">
-          <div className="flex items-center gap-6">
-            <div className={`${orbitron.className} text-2xl font-bold text-gray-800 hover:text-purple-600 transition-colors duration-300`}>
-              Prateek Joshi
-            </div>
-            <div className="hidden md:flex gap-2">
-              <span className="px-3 py-1 bg-purple-100 rounded-full text-sm text-purple-600 font-medium">Java</span>
-              <span className="px-3 py-1 bg-blue-100 rounded-full text-sm text-blue-600 font-medium">React.js</span>
-              <span className="px-3 py-1 bg-green-100 rounded-full text-sm text-green-600 font-medium">Node.js</span>
-              <span className="px-3 py-1 bg-orange-100 rounded-full text-sm text-orange-600 font-medium">AWS</span>
-            </div>
+    <main className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-black text-white overflow-x-hidden">
+      {/* Rest of your JSX remains the same */}
+      {/* Hero section with typing effect */}
+      {/* Hero section */}
+      <div className="pt-14 pb-6 flex items-center justify-center bg-gradient-to-r from-gray-900/50 to-purple-900/50 backdrop-blur-sm">
+        <div className="text-center">
+          <h1 className="text-2xl md:text-4xl font-bold mb-1 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 bg-clip-text text-transparent">
+            Hello, I'm Prateek
+          </h1>
+          <div className="text-base md:text-xl font-medium">
+            <span className="mr-1.5 text-gray-200">I'm a</span>
+            <span ref={el} className="inline-block bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent font-bold"></span>
           </div>
-          <ul className="flex gap-12">
-            {['Home', 'Portfolio', 'About', 'Contact'].map((item) => (
-              <li key={item}>
-                <a 
-                  href={`#${item.toLowerCase()}`} 
-                  className="text-gray-300 hover:text-purple-400 transition-colors relative group"
-                >
-                  {item}
-                  <span className="absolute -bottom-2 left-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      </header>
+        </div>
+      </div>
 
-      {/* About Section */}
-      <section id="about" className="pt-32 pb-10 px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-16 items-start">
-            <div className="relative h-[400px] rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300">
-              <Image
-                src="/images/Photo.jpeg"
-                alt="Profile"
-                fill
-                className="object-cover object-right"
-                priority
-              />
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
-                <h2 className="text-3xl font-bold text-white mb-2">Prateek Joshi</h2>
-                <p className="text-gray-200">Full Stack Developer</p>
+      {/* Navigation */}
+      <div className="sticky top-0 z-50">
+        <header className="w-full bg-white/80 backdrop-blur-md py-1.5 px-6 shadow-sm border-b border-purple-100">
+          <nav className="max-w-7xl mx-auto flex justify-between items-center h-10">
+            <div className="flex items-center gap-4">
+              <div className={`${orbitron.className} text-lg font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent hover:from-blue-600 hover:to-purple-600 transition-all duration-300`}>
+                PJ
+              </div>
+              <div className="hidden md:flex gap-2">
+                <span className="px-2.5 py-0.5 bg-gradient-to-r from-purple-100 to-purple-50 rounded-full text-xs text-purple-600 font-medium">Java</span>
+                <span className="px-2.5 py-0.5 bg-gradient-to-r from-blue-100 to-blue-50 rounded-full text-xs text-blue-600 font-medium">React.js</span>
+                <span className="px-2.5 py-0.5 bg-gradient-to-r from-green-100 to-green-50 rounded-full text-xs text-green-600 font-medium">Node.js</span>
+                <span className="px-2.5 py-0.5 bg-gradient-to-r from-orange-100 to-orange-50 rounded-full text-xs text-orange-600 font-medium">AWS</span>
               </div>
             </div>
-            
-            <div className="space-y-8">
-              <div className="bg-white rounded-lg p-8 shadow-md hover:shadow-lg transition-all duration-300">
-                <h2 className="text-4xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-blue-600">About Me</h2>
-                <div className="prose prose-lg">
-                  <p className="text-gray-700 leading-relaxed">
-                    <span className="font-semibold text-purple-600">Experienced Software Engineer</span> with over 
-                    <span className="font-bold text-blue-600"> 6 years</span> of expertise in 
-                    <span className="font-semibold text-purple-600"> Full Stack Development</span>, 
-                    <span className="font-semibold text-blue-600"> Cloud Technologies</span>, and 
-                    <span className="font-semibold text-purple-600"> Enterprise Solutions</span>. 
+            <ul className="flex gap-8">
+              {['Home', 'Portfolio', 'About', 'Contact'].map((item) => (
+                <li key={item}>
+                  <a 
+                    href={`#${item.toLowerCase()}`} 
+                    className="text-sm text-gray-700 hover:text-purple-600 transition-all duration-300 relative group font-medium"
+                  >
+                    {item}
+                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-600 to-blue-600 group-hover:w-full transition-all duration-300"></span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </header>
+      </div>
+
+      {/* About Section with Instagram-inspired design */}
+      <section id="about" className="pt-32 pb-10 px-8 bg-gradient-to-tr from-[#833ab4] via-[#fd1d1d] to-[#fcb045] bg-opacity-5">
+        <div className="absolute inset-0 bg-[url('/images/grid.svg')] opacity-10"></div>
+        <div className="max-w-4xl mx-auto relative">
+          {/* Instagram-style profile card */}
+          <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-2xl p-8 hover:shadow-purple-100/50 transition-all duration-500">
+            <div className="flex flex-col md:flex-row gap-8 items-center">
+              {/* Profile Image with Stories-like ring */}
+              <div className="relative group">
+                <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-500 animate-spin-slow p-1"></div>
+                <div className="relative w-48 h-48 rounded-full overflow-hidden ring-4 ring-white">
+                  <Image
+                    src="/images/Photo.jpeg"
+                    alt="Profile"
+                    fill
+                    className="object-cover transform group-hover:scale-110 transition-transform duration-500"
+                    priority
+                  />
+                </div>
+              </div>
+              
+              {/* Profile Info */}
+              <div className="flex-1 text-center md:text-left">
+                {/* Profile Header */}
+                <div className="flex items-center gap-4 mb-6">
+                  <h2 className="text-2xl font-bold text-gray-800">Prateek Joshi</h2>
+                  <div className="flex gap-2">
+                    <button 
+                      onClick={() => setIsQueryFormOpen(true)}
+                      className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-2 rounded-full text-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
+                    >
+                      Follow
+                    </button>
+                    <button className="bg-gray-100 text-gray-600 px-4 py-2 rounded-full text-sm hover:bg-gray-200 transition-all duration-300">
+                      Message
+                    </button>
+                  </div>
+                </div>
+
+                {/* Stats with hover effects */}
+                <div className="flex justify-center md:justify-start gap-12 mb-6">
+                  <div className="text-center group cursor-pointer">
+                    <div className="font-bold text-2xl text-gray-800 group-hover:text-purple-600 transition-colors">6+</div>
+                    <div className="text-sm text-gray-500 group-hover:text-purple-500 transition-colors">Years</div>
+                  </div>
+                  <div className="text-center group cursor-pointer">
+                    <div className="font-bold text-2xl text-gray-800 group-hover:text-purple-600 transition-colors">50+</div>
+                    <div className="text-sm text-gray-500 group-hover:text-purple-500 transition-colors">Projects</div>
+                  </div>
+                  <div className="text-center group cursor-pointer">
+                    <div className="font-bold text-2xl text-gray-800 group-hover:text-purple-600 transition-colors">100%</div>
+                    <div className="text-sm text-gray-500 group-hover:text-purple-500 transition-colors">Success</div>
+                  </div>
+                </div>
+                
+                {/* Bio with gradient text */}
+                <div className="space-y-3">
+                  <p className="font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+                    Full Stack Developer | Cloud Enthusiast
                   </p>
-                  <p className="text-gray-700 leading-relaxed mt-4">
-                    Currently working as a <span className="font-bold text-blue-600">Consultant at ADP</span>, focusing on building scalable applications and implementing innovative solutions for complex business challenges.
-                  </p>
+                  <p className="text-gray-600">Building scalable applications and implementing innovative solutions for complex business challenges.</p>
+                  <div className="flex flex-wrap gap-2 mt-4">
+                    <span className="px-3 py-1 bg-purple-50 text-purple-600 rounded-full text-sm font-medium hover:bg-purple-100 transition-colors cursor-pointer">#developer</span>
+                    <span className="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-sm font-medium hover:bg-blue-100 transition-colors cursor-pointer">#cloud</span>
+                    <span className="px-3 py-1 bg-pink-50 text-pink-600 rounded-full text-sm font-medium hover:bg-pink-100 transition-colors cursor-pointer">#fullstack</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -80,42 +189,55 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Experience Section - Moved to its own section */}
-      <section className="py-16 px-8 bg-white">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-3xl font-bold mb-12 text-center text-gray-800">
+      
+
+      {/* Experience Section - Professional Journey */}
+      <section className="py-16 px-8 bg-gradient-to-br from-gray-50 to-purple-50">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-4xl font-bold mb-16 text-center bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-blue-600">
             Professional Journey
           </h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="bg-gray-50 rounded-lg p-8 shadow-md hover:shadow-lg transition-all duration-300">
-              <div className="border-l-4 border-blue-600 pl-4 mb-8">
-                <h4 className="font-black text-xl text-black">Consultant</h4>
-                <p className="font-extrabold text-gray-700">ADP • Dec 2024 - Present</p>
-                <p className="font-semibold text-gray-600">Hyderabad, Telangana, India</p>
+          <div className="space-y-8">
+            {[
+              {
+                title: "Consultant",
+                company: "ADP",
+                period: "Dec 2024 - Present",
+                skills: ["Cloud", "AWS", "System Design"],
+              },
+              {
+                title: "Senior Associate",
+                company: "Publicis Sapient",
+                period: "Oct 2021 - Dec 2024",
+                skills: ["AWS Lambda", "Microservices"],
+              },
+              {
+                title: "Software Engineer",
+                company: "FarEye",
+                period: "Dec 2019 - Oct 2021",
+                skills: ["AWS", "PostgreSQL", "Node.js"],
+              },
+              {
+                title: "Software Engineer",
+                company: "Comviva",
+                period: "Aug 2017 - Nov 2019",
+                skills: ["Java", "Spring Boot"],
+              }
+            ].map((job, index) => (
+              <div key={index} className="group bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border-l-4 border-purple-600">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                  <div>
+                    <h4 className="font-bold text-xl text-gray-800">{job.title}</h4>
+                    <p className="text-purple-600 font-medium">{job.company} • {job.period}</p>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {job.skills.map((skill, idx) => (
+                      <span key={idx} className="px-3 py-1 bg-purple-50 text-purple-600 rounded-full text-sm font-medium">{skill}</span>
+                    ))}
+                  </div>
+                </div>
               </div>
-              
-              <div className="border-l-4 border-blue-600 pl-4">
-                <h4 className="font-black text-xl text-black">Senior Associate</h4>
-                <p className="font-extrabold text-gray-700">Publicis Sapient • Oct 2021 - Dec 2024</p>
-                <p className="font-semibold text-gray-600">Gurugram, Haryana, India</p>
-                <p className="font-semibold text-gray-600">AWS Lambda, Amazon Web Services (AWS), Cloud Technologies</p>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-xl p-8 shadow-lg transform hover:scale-[1.02] transition-all duration-300">
-              <div className="border-l-4 border-blue-600 pl-4 mb-8">
-                <h4 className="font-black text-xl text-black">Software Engineer</h4>
-                <p className="font-extrabold text-gray-700">FarEye • Dec 2019 - Oct 2021</p>
-                <p className="font-semibold text-gray-600">Noida Area, India</p>
-                <p className="font-semibold text-gray-600">Amazon Web Services (AWS), PostgreSQL</p>
-              </div>
-
-              <div className="border-l-4 border-blue-600 pl-4">
-                <h4 className="font-black text-xl text-black">Software Engineer</h4>
-                <p className="font-extrabold text-gray-700">Comviva • Aug 2017 - Nov 2019</p>
-                <p className="font-semibold text-gray-600">Gurgaon, India</p>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
@@ -127,8 +249,9 @@ export default function Home() {
             My Expertise
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="group bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300">
-              <div className="relative h-48 w-full rounded-t-lg overflow-hidden">
+            {/* Web Development */}
+            <div className="group relative overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 bg-white/80 backdrop-blur-sm">
+              <div className="relative h-64 w-full">
                 <Image
                   src="https://images.unsplash.com/photo-1547658719-da2b51169166"
                   alt="Web Development"
@@ -136,22 +259,24 @@ export default function Home() {
                   className="object-cover transition-transform duration-500 group-hover:scale-110"
                 />
               </div>
-              <div className="p-6">
-                <h3 className="text-xl font-bold mb-2 text-gray-800">Web Development</h3>
-                <p className="text-gray-600 mb-4">
-                  Modern web applications using React, Next.js, and TailwindCSS
-                </p>
-                <div className="flex gap-2">
-                  <span className="px-3 py-1 bg-purple-100 rounded-full text-sm text-purple-600 font-medium">React</span>
-                  <span className="px-3 py-1 bg-white/20 rounded-full text-sm text-white">Next.js</span>
-                  <span className="px-3 py-1 bg-white/20 rounded-full text-sm text-white">TailwindCSS</span>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                <div className="absolute bottom-0 left-0 right-0 p-8">
+                  <h3 className="text-2xl font-bold mb-4 text-white">Web Development</h3>
+                  <p className="text-gray-200 mb-4">
+                    Modern web applications using React, Next.js, and TailwindCSS
+                  </p>
+                  <div className="flex gap-2">
+                    <span className="px-3 py-1 bg-white/20 rounded-full text-sm text-white">React</span>
+                    <span className="px-3 py-1 bg-white/20 rounded-full text-sm text-white">Next.js</span>
+                    <span className="px-3 py-1 bg-white/20 rounded-full text-sm text-white">TailwindCSS</span>
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Other project cards - update height for all image containers */}
+            {/* API Development */}
             <div className="group relative overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 bg-white/80 backdrop-blur-sm">
-              <div className="relative h-48 w-full">
+              <div className="relative h-64 w-full">
                 <Image
                   src="https://images.unsplash.com/photo-1623282033815-40b05d96c903"
                   alt="API Development"
@@ -175,8 +300,8 @@ export default function Home() {
             </div>
 
             {/* Integration Development */}
-            <div className="group relative overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2">
-              <div className="relative h-80 w-full">
+            <div className="group relative overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 bg-white/80 backdrop-blur-sm">
+              <div className="relative h-64 w-full">
                 <Image
                   src="https://images.unsplash.com/photo-1551434678-e076c223a692"
                   alt="Integration Development"
@@ -199,19 +324,19 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Graphic Design */}
-            <div className="group relative overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2">
-              <div className="relative h-80 w-full">
+            {/* UI/UX Design */}
+            <div className="group relative overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 bg-white/80 backdrop-blur-sm">
+              <div className="relative h-64 w-full">
                 <Image
                   src="https://images.unsplash.com/photo-1626785774573-4b799315345d"
-                  alt="Graphic Design"
+                  alt="UI/UX Design"
                   fill
                   className="object-cover transition-transform duration-500 group-hover:scale-110"
                 />
               </div>
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                 <div className="absolute bottom-0 left-0 right-0 p-8">
-                  <h3 className="text-2xl font-bold mb-4 text-white">Graphic Design</h3>
+                  <h3 className="text-2xl font-bold mb-4 text-white">UI/UX Design</h3>
                   <p className="text-gray-200 mb-4">
                     Creative UI/UX design solutions for web and mobile applications
                   </p>
@@ -314,7 +439,8 @@ export default function Home() {
                         id="name"
                         name="name"
                         required
-                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
+                        onChange={handleNameChange}
+                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 text-gray-800"
                         placeholder="John Doe"
                       />
                     </div>
@@ -325,10 +451,22 @@ export default function Home() {
                         id="email"
                         name="email"
                         required
-                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
+                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 text-gray-800"
                         placeholder="john@example.com"
                       />
                     </div>
+                  </div>
+
+                  <div>
+                    <label htmlFor="mobile" className="block text-gray-700 font-medium mb-2">Mobile Number</label>
+                    <input
+                      type="tel"
+                      id="mobile"
+                      name="mobile"
+                      required
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 text-gray-800"
+                      placeholder="+91 1234567890"
+                    />
                   </div>
 
                   <div>
@@ -337,7 +475,7 @@ export default function Home() {
                       id="service"
                       name="service"
                       required
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 bg-white"
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 bg-white text-gray-800"
                     >
                       <option value="">Select a service</option>
                       <option value="web-development">Website Development</option>
@@ -348,14 +486,14 @@ export default function Home() {
                   </div>
 
                   <div>
-                    <label htmlFor="description" className="block text-gray-700 font-medium mb-2">Tell me about your project</label>
+                    <label htmlFor="description" className="block text-gray-700 font-medium mb-2">Project Details</label>
                     <textarea
                       id="description"
                       name="description"
                       rows={5}
                       required
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
-                      placeholder="Share your project requirements, goals, and timeline..."
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 text-gray-800"
+                      placeholder="Please describe your project requirements, goals, timeline, and budget expectations..."
                     ></textarea>
                   </div>
 
