@@ -8,6 +8,8 @@ import Typed from 'typed.js';
 
 const orbitron = Orbitron({ subsets: ['latin'] })
 
+import Chat from '../components/Chat';
+
 export default function Home() {
   const [isQueryFormOpen, setIsQueryFormOpen] = useState(false);
   const [showHiringFields, setShowHiringFields] = useState(false);
@@ -89,8 +91,14 @@ export default function Home() {
         <header className="w-full bg-white/10 backdrop-blur-lg py-1.5 px-6 border-b border-white/10">
           <nav className="max-w-7xl mx-auto flex justify-between items-center h-10">
             <div className="flex items-center gap-4">
-              <div className={`${orbitron.className} text-lg font-bold bg-gradient-to-r from-purple-400 via-pink-500 to-blue-400 bg-clip-text text-transparent hover:from-blue-400 hover:via-pink-500 hover:to-purple-400 transition-all duration-300`}>
-                PJ
+              <div className="relative w-8 h-8 rounded-full overflow-hidden ring-2 ring-white/20 hover:ring-purple-400/50 hover:scale-110 hover:shadow-[0_0_15px_rgba(168,85,247,0.3)] transition-all duration-500 cursor-pointer">
+                <Image
+                  src="/images/Photo.jpeg"
+                  alt="Logo"
+                  fill
+                  className="object-cover"
+                  priority
+                />
               </div>
               <div className="hidden md:flex gap-1.5">
                 <span className="px-2 py-0.5 bg-white/10 backdrop-blur-sm rounded-md text-[10px] text-white/80 font-medium border border-white/10">Java</span>
@@ -601,6 +609,12 @@ export default function Home() {
           </div>
         </div>
       </section>
+      <Chat />
     </main>
   )
 }
+
+{/* Add Chat component here, before closing main tag */}
+
+// Remove this line as it's outside the component
+// <Chat />
